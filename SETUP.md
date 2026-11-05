@@ -15,7 +15,7 @@ The [reference manual](docs/REFERENCE.md) covers the features in depth.
   - **Chat tools & code** as well, to use the server's tools from Chat.
 - **A personal API key.** In the web app, open the user menu → **API key** → **Generate**.
 - **Windows:** Windows 10 version 2004 (build 19041) or later, or Windows 11, with the [WebView2 Runtime](https://developer.microsoft.com/microsoft-edge/webview2/). WebView2 is built into Windows 11 and current Windows 10.
-- **Linux (x64):** Chrome, Chromium, Edge, Brave or Vivaldi for the app window. Without one, the default browser is used.
+- **Linux (x64, ARM64) and macOS (Apple silicon, Intel):** Chrome, Chromium, Edge, Brave or Vivaldi for the app window. Without one, the default browser is used.
 - **To build from source:** the [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0). Published builds are self-contained.
 
 ## 2. Install

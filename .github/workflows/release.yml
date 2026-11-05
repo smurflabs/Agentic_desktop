@@ -1,31 +1,46 @@
-# Publishes a GitHub release when a version tag (v0.4.19, ...) is pushed:
-#   AgenticClient.exe                 Windows, one self-contained file (it writes its www files out on the first start)
-#   AgenticDesktop-<version>-x64.msi  Windows installer (per user, Start menu and desktop shortcuts; tools\MsiBuilder)
-#   agentic-desktop-<version>-linux-x64.tar.gz   Linux (the Agentic-Desktop folder)
+# Publishes the desktop app on GitHub for every platform the Agentic server offers:
+#   AgenticDesktop-<version>-x64.msi                  Windows installer (per user, Start menu and desktop shortcuts)
+#   AgenticClient.exe                                 Windows x64, one self-contained file (writes its www files out on first start)
+#   agentic-desktop-<version>-<platform>.tar.gz       linux-x64, linux-arm64, osx-x64, osx-arm64: the Agentic-Desktop folder
 #   SHA256SUMS.txt
-# Windows builds run on Windows, so the exe keeps its icon and version resource. The notes are the annotated tag's message.
+# Windows builds run on Windows (icon and version resource) and macOS builds on macOS (the ad-hoc signature Apple
+# Silicon needs). A pushed v* tag creates the release with the annotated tag's message as notes; running the workflow by
+# hand with a tag rebuilds and replaces the files of that existing release.
 name: Release
 
 on:
   push:
     tags: [ 'v*' ]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing release tag whose files to rebuild (e.g. v0.4.19)'
+        required: true
 
 permissions:
   contents: write
 
 env:
+  TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
   # The MSI's upgrade code: never change it, or new MSIs stop replacing installed ones (same as tools\publish-clients.ps1).
   UPGRADE_CODE: '{5B0E4C1A-6D2F-4E8B-9A71-3C4D2E1F0A93}'
 
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
         include:
           - rid: win-x64
             os: windows-latest
           - rid: linux-x64
             os: ubuntu-latest
+          - rid: linux-arm64
+            os: ubuntu-latest
+          - rid: osx-x64
+            os: macos-latest
+          - rid: osx-arm64
+            os: macos-latest
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -35,7 +50,7 @@ jobs:
         shell: bash
         run: |
           project=$(sed -n 's:.*<Version>\(.*\)</Version>.*:\1:p' AgenticClient.vbproj | head -n 1)
-          if [ "$project" != "${GITHUB_REF_NAME#v}" ]; then echo "Tag $GITHUB_REF_NAME does not match <Version> $project"; exit 1; fi
+          if [ "$project" != "${TAG#v}" ]; then echo "Tag $TAG does not match <Version> $project"; exit 1; fi
           echo "version=$project" >> "$GITHUB_OUTPUT"
 
       - uses: actions/setup-dotnet@v4
@@ -68,12 +83,14 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'The MSI was not built.' }
           Get-ChildItem dist
 
-      - name: Package (Linux)
-        if: runner.os == 'Linux'
+      - name: Package (Linux, macOS)
+        if: runner.os != 'Windows'
+        shell: bash
         run: |
           chmod +x Agentic-Desktop/AgenticClient
+          file Agentic-Desktop/AgenticClient || true
           mkdir -p dist
-          tar -czf "dist/agentic-desktop-${{ steps.version.outputs.version }}-linux-x64.tar.gz" Agentic-Desktop
+          tar -czf "dist/agentic-desktop-${{ steps.version.outputs.version }}-${{ matrix.rid }}.tar.gz" Agentic-Desktop
 
       - uses: actions/upload-artifact@v4
         with:
@@ -99,4 +116,8 @@ jobs:
         run: |
           git fetch --force --tags
           cd dist && sha256sum * > SHA256SUMS.txt && cat SHA256SUMS.txt && cd ..
-          gh release create "$GITHUB_REF_NAME" dist/* --title "Agentic Desktop ${GITHUB_REF_NAME#v}" --notes-from-tag --verify-tag
+          if gh release view "$TAG" > /dev/null 2>&1; then
+            gh release upload "$TAG" dist/* --clobber
+          else
+            gh release create "$TAG" dist/* --title "Agentic Desktop ${TAG#v}" --notes-from-tag --verify-tag
+          fi

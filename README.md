@@ -7,7 +7,7 @@
 [![Release](https://github.com/smurflabs/Agentic_desktop/actions/workflows/release.yml/badge.svg)](https://github.com/smurflabs/Agentic_desktop/releases)
 [![License: GPL v3](https://img.shields.io/badge/license-GPL--3.0--or--later-blue.svg)](LICENSE)
 ![.NET 10](https://img.shields.io/badge/.NET-10-512BD4)
-![Runs on Windows and Linux](https://img.shields.io/badge/runs%20on-Windows%20%7C%20Linux-lightgrey)
+![Runs on Windows, Linux and macOS](https://img.shields.io/badge/runs%20on-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey)
 
 [Install](#install) · [Features](#features) · [Setup guide](SETUP.md) · [Reference manual](docs/REFERENCE.md) · [Agentic server](https://github.com/smurflabs/Agentic)
 
@@ -72,9 +72,12 @@ Download the build for your system from [Releases](https://github.com/smurflabs/
 |---|---|
 | `AgenticDesktop-<version>-x64.msi` | **Windows installer.** Installs for your account only, with no administrator rights, and adds Start menu and desktop shortcuts. |
 | `AgenticClient.exe` | Windows, portable: one self-contained file. Run it from any folder you can write to. |
-| `agentic-desktop-<version>-linux-x64.tar.gz` | Linux x64. The window opens in Chrome, Chromium, Edge, Brave or Vivaldi. Extract it and run `./Agentic-Desktop/AgenticClient`. |
+| `agentic-desktop-<version>-linux-x64.tar.gz` | Linux x64 |
+| `agentic-desktop-<version>-linux-arm64.tar.gz` | Linux ARM64 |
+| `agentic-desktop-<version>-osx-arm64.tar.gz` | macOS on Apple silicon (M1 and later) |
+| `agentic-desktop-<version>-osx-x64.tar.gz` | macOS on Intel |
 
-On Windows you need Windows 10 (version 2004) or later, x64, with the [WebView2 Runtime](https://developer.microsoft.com/microsoft-edge/webview2/), which Windows 11 already has.
+On Windows you need Windows 10 (version 2004) or later, x64, with the [WebView2 Runtime](https://developer.microsoft.com/microsoft-edge/webview2/), which Windows 11 already has. On Linux and macOS, extract the archive and run `./Agentic-Desktop/AgenticClient`. The window opens in Chrome, Chromium, Edge, Brave or Vivaldi.
 
 ### From your Agentic server
 
