@@ -1,0 +1,202 @@
+/* Agentic desktop layer: only the pieces the web app does not have. Colours, spacing and motion come from the web
+   app's own tokens (--surface, --accent, --ease-out …), so everything matches it in light and dark mode. */
+
+.desktop-pill {
+  display: inline-flex; align-items: center; gap: 5px; margin-top: 2px; padding: 2px 8px 2px 6px; border-radius: 999px; font-size: 10.5px; font-weight: 650;
+  letter-spacing: .04em; text-transform: uppercase; color: #c7cdfb; background: rgba(139, 150, 255, .14); border: 1px solid rgba(139, 150, 255, .22);
+}
+.desktop-pill .ic { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2; }
+#nav .pill.warn { background: rgba(251, 191, 36, .18); color: #fbbf24; }
+
+/* toolbar + search */
+.dk-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 14px; }
+.dk-toolbar select { width: auto; min-width: 150px; }
+.dk-search { margin: 0; min-width: 260px; flex: 0 1 360px; height: 36px; }
+
+/* skills */
+.dk-skill-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+.dk-skill {
+  display: flex; flex-direction: column; gap: 8px; text-align: left; font: inherit; color: var(--text); cursor: pointer; padding: 14px 15px; border-radius: 12px;
+  border: 1px solid var(--border); background: var(--surface-2); min-height: 132px;
+  transition: border-color var(--t-fast), transform var(--t-fast) var(--ease-out), box-shadow var(--t-fast), background-color var(--t-fast);
+  animation: rise-in .35s var(--ease-out) both; animation-delay: calc(var(--i, 0) * 22ms);
+}
+.dk-skill:hover { border-color: color-mix(in srgb, var(--accent) 55%, var(--border)); transform: translateY(-2px); box-shadow: var(--shadow-md); background: var(--surface); }
+.dk-skill:active { transform: scale(.99); }
+.dk-skill.hidden { display: none; }
+.dk-skill-top { display: flex; align-items: center; gap: 9px; }
+.dk-skill-icon { width: 28px; height: 28px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; flex: none; }
+.dk-skill-icon .ic { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linejoin: round; }
+.dk-skill-icon.k-skill { background: var(--accent-soft); color: var(--accent); }
+.dk-skill-icon.k-cmd { background: var(--surface-3); color: var(--text-2); }
+.dk-skill-name { font-family: var(--mono); font-weight: 650; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dk-skill-desc { margin: 0; font-size: 13px; color: var(--text-2); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; flex: 1; }
+.dk-skill-foot { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.dk-skill-detail { display: flex; flex-direction: column; gap: 12px; }
+.dk-skill-meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.dk-lead { margin: 0; font-size: 14.5px; color: var(--text); line-height: 1.55; }
+.dk-path { display: flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--muted); min-width: 0; }
+.dk-path .ic { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2; flex: none; }
+.dk-path code { overflow-wrap: anywhere; }
+.dk-skill-body { border-top: 1px solid var(--border); padding-top: 14px; }
+.dk-files { border: 1px solid var(--border); border-radius: 10px; background: var(--surface-2); }
+.dk-files summary { padding: 8px 12px; cursor: pointer; font-size: 13px; font-weight: 600; }
+.dk-file-list { display: grid; gap: 1px; padding: 0 6px 6px; max-height: 220px; overflow: auto; }
+.dk-file { display: flex; justify-content: space-between; gap: 10px; text-align: left; font: inherit; font-size: 12.5px; padding: 6px 8px; border-radius: 7px; border: 0; background: transparent; color: var(--text); cursor: pointer; font-family: var(--mono); }
+.dk-file:hover { background: var(--surface-3); }
+.dk-file-view { padding: 0 10px 10px; animation: fade-in .2s ease; }
+.dk-file-view-head { font-size: 12px; padding: 6px 0; }
+
+/* code / diff */
+.dk-code { margin: 0; max-height: 380px; overflow: auto; background: #0d1220; color: #dbe2f1; border: 0; border-radius: 10px; padding: 12px 14px; font-size: 12.5px; line-height: 1.55; white-space: pre-wrap; overflow-wrap: anywhere; }
+.dk-code.dk-del { background: color-mix(in srgb, #f87171 14%, #0d1220); border-left: 3px solid #f87171; }
+.dk-code.dk-add { background: color-mix(in srgb, #4ade80 12%, #0d1220); border-left: 3px solid #4ade80; }
+.dk-log { max-height: 60vh; font-size: 11.5px; }
+
+/* approval dialog */
+.dk-approve { display: flex; flex-direction: column; gap: 12px; }
+.dk-approve-head { display: flex; gap: 12px; align-items: flex-start; }
+.dk-approve-icon { width: 38px; height: 38px; border-radius: 11px; flex: none; display: inline-flex; align-items: center; justify-content: center; color: #fff;
+  background: linear-gradient(135deg, var(--warn), color-mix(in srgb, var(--warn) 60%, var(--bad))); animation: pin-pop .55s var(--ease-spring) both; }
+.dk-approve-icon .ic { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; }
+.dk-approve-head b { font-size: 15px; }
+
+/* local MCP */
+.dk-mcp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 14px; }
+.dk-mcp { display: flex; flex-direction: column; gap: 10px; padding: 16px 18px; animation: rise-in .35s var(--ease-out) both; }
+.dk-mcp.off { opacity: .7; }
+.dk-mcp-head { display: flex; align-items: flex-start; gap: 10px; }
+.dk-mcp-icon { width: 34px; height: 34px; border-radius: 10px; background: var(--accent-soft); color: var(--accent); display: inline-flex; align-items: center; justify-content: center; flex: none; }
+.dk-mcp-icon .ic { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+.dk-mcp-target { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.dk-mcp-target code { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; font-size: 12px; }
+.dk-mcp-err { margin: 0; overflow-wrap: anywhere; max-height: 110px; overflow: auto; }
+.dk-mcp-tools { display: flex; flex-wrap: wrap; gap: 5px; }
+.dk-mcp-actions { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; border-top: 1px solid var(--border); padding-top: 10px; margin-top: auto; }
+.dk-tool-list { display: grid; gap: 6px; }
+.dk-tool { border: 1px solid var(--border); border-radius: 10px; background: var(--surface-2); }
+.dk-tool summary { display: flex; gap: 10px; align-items: baseline; padding: 8px 12px; cursor: pointer; min-width: 0; }
+.dk-tool summary .muted { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dk-tool-body { padding: 0 12px 12px; display: grid; gap: 8px; }
+.dk-try-out { animation: fade-in .2s ease; }
+.dk-import-list { display: grid; gap: 2px; max-height: 50vh; overflow: auto; }
+.dk-paste { border: 1px dashed var(--border-strong); border-radius: 10px; padding: 8px 12px; }
+.dk-paste summary { cursor: pointer; font-size: 13px; font-weight: 600; }
+.dk-paste textarea { margin: 8px 0; width: 100%; }
+
+/* switches */
+.dk-switch { display: inline-flex; flex-direction: row; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 500; cursor: pointer; color: var(--text-2); }
+.dk-switch input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.dk-switch span { width: 30px; height: 17px; border-radius: 999px; background: var(--border-strong); position: relative; transition: background-color var(--t-med); flex: none; }
+.dk-switch span::after { content: ""; position: absolute; left: 2px; top: 2px; width: 13px; height: 13px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0, 0, 0, .25); transition: transform var(--t-med) var(--ease-spring); }
+.dk-switch input:checked + span { background: var(--accent); }
+.dk-switch input:checked + span::after { transform: translateX(13px); }
+.dk-switch input:focus-visible + span { box-shadow: 0 0 0 3px var(--accent-ring); }
+
+/* settings */
+.dk-modes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
+.dk-mode { display: flex; flex-direction: column; gap: 3px; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface-2); cursor: pointer; font-weight: 400;
+  transition: border-color var(--t-fast), background-color var(--t-fast), box-shadow var(--t-fast); }
+.dk-mode input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.dk-mode b { font-size: 14px; color: var(--text); }
+.dk-mode span { font-size: 12.5px; color: var(--muted); line-height: 1.45; }
+.dk-mode:hover { border-color: var(--border-strong); }
+.dk-mode.on { border-color: var(--accent); background: var(--accent-soft); box-shadow: 0 0 0 3px var(--accent-ring); }
+.dk-mode:has(input:focus-visible) { box-shadow: 0 0 0 3px var(--accent-ring); }
+.dk-settings .card + .card { margin-top: 16px; }
+#dk-test-out { display: inline-flex; align-items: center; gap: 8px; }
+
+/* chat composer: This PC + slash completion */
+.dk-pc-wrap .chip-toggle svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; }
+.tool-opt b .ic { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 2; vertical-align: -2px; margin-right: 2px; }
+.dk-menu-empty { padding: 6px 8px 8px; }
+.dk-slash { max-width: 860px; margin: 0 auto 8px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow-lg); padding: 6px; animation: pop-in .18s var(--ease-out); transform-origin: bottom center; }
+.dk-slash-head { display: flex; align-items: center; gap: 8px; font-size: 11.5px; font-weight: 650; text-transform: uppercase; letter-spacing: .06em; color: var(--accent); padding: 6px 8px 6px; }
+.dk-slash-head .muted { margin-left: auto; text-transform: none; letter-spacing: 0; font-weight: 500; }
+.dk-slash-head .ic { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 2; }
+.dk-slash-item { display: grid; grid-template-columns: minmax(140px, 30%) minmax(0, 1fr) auto; align-items: center; gap: 12px; width: 100%; text-align: left; font: inherit; color: var(--text);
+  padding: 8px 10px; border-radius: 9px; border: 0; background: transparent; cursor: pointer; transition: background-color var(--t-fast); }
+.dk-slash-item.active, .dk-slash-item:hover { background: var(--accent-soft); }
+.dk-slash-name { font-family: var(--mono); font-size: 13px; font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dk-slash-desc { font-size: 12.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+@media (max-width: 900px) {
+  .dk-modes { grid-template-columns: 1fr; }
+  .dk-mcp-grid { grid-template-columns: 1fr; }
+  .dk-slash-item { grid-template-columns: 1fr auto; }
+  .dk-slash-desc { display: none; }
+}
+
+/* Two even columns for the desktop forms (the web app's grid packs 200px columns, too narrow for paths and URLs). */
+.dk-settings .form-grid, #modal-card form[data-form^="dk-"] .form-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.dk-settings input:not([type=checkbox]):not([type=radio]), .dk-settings select, .dk-settings textarea { width: 100%; }
+@media (max-width: 900px) { .dk-settings .form-grid, #modal-card form[data-form^="dk-"] .form-grid { grid-template-columns: 1fr; } }
+
+/* chat: Skills panel */
+.dk-skills-menu { width: min(460px, 92vw); max-height: min(70vh, 560px); padding: 8px; display: flex; flex-direction: column; gap: 6px; }
+.dk-sk-head { display: flex; align-items: center; justify-content: space-between; padding: 2px 4px 4px; }
+.dk-sk-master b { font-size: 13px; color: var(--text); }
+.dk-sk-search { margin: 0; height: 34px; }
+.dk-sk-list { overflow: auto; display: flex; flex-direction: column; gap: 2px; min-height: 0; }
+.dk-sk-row { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; align-items: center; gap: 8px; padding: 7px 6px; border-radius: 9px;
+  transition: background-color var(--t-fast), opacity var(--t-med); animation: rise-in .25s var(--ease-out) both; animation-delay: calc(var(--i, 0) * 15ms); }
+.dk-sk-row:hover { background: var(--surface-3); }
+.dk-sk-row.off { opacity: .55; }
+.dk-sk-row .dk-switch span { margin: 0; }
+.dk-sk-cmd { display: inline-flex; justify-content: center; color: var(--muted); }
+.dk-sk-cmd .ic { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2; }
+.dk-sk-text { display: flex; flex-direction: column; min-width: 0; }
+.dk-sk-text b { font-family: var(--mono); font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dk-sk-text span { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dk-skills-wrap .chip-toggle svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; }
+
+/* settings: two modes, the server switch */
+.dk-modes.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.dk-switch-row { font-size: 13px; font-weight: 600; color: var(--text); margin-top: 22px; }
+.dk-reveal:not(.hidden) { animation: rise-in .3s var(--ease-out); }
+
+/* An installed update: a bar at the top right until the app restarts or it is dismissed. */
+.dk-update { position: fixed; right: 18px; top: 72px; z-index: 900; display: flex; align-items: center; gap: 10px; max-width: min(560px, calc(100vw - 36px));
+  padding: 10px 12px 10px 16px; border-radius: 12px; background: var(--surface, #1b1d24); color: var(--text, inherit); border: 1px solid var(--border, rgba(127,127,127,.25));
+  box-shadow: 0 10px 30px rgba(0,0,0,.25); font-size: 13px; animation: dk-update-in .25s ease-out; }
+.dk-update span { flex: 1; }
+@keyframes dk-update-in { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .dk-update { animation: none; } }
+
+/* No screenshot tool on this computer (Linux): no screenshot button. */
+.dk-no-shots .dk-shot-btn { display: none; }
+
+/* Well-known MCP servers (Local MCP page): grouped by kind, a card each with a one-click Add (or Set up… for a key or a folder). */
+.dk-rec-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); gap: 10px; }
+.dk-cat-title { margin: 14px 2px 8px; }
+.dk-cat-title:first-child { margin-top: 0; }
+.dk-rec { transition: border-color var(--t-fast), transform var(--t-fast); }
+.dk-rec:hover { border-color: var(--border-strong); }
+.dk-rec { display: flex; align-items: center; gap: 16px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface-2); }
+.dk-rec .grow { min-width: 0; }
+.dk-rec p { margin: 4px 0 6px; }
+.dk-rec-cmd code { font-size: 12px; overflow-wrap: anywhere; }
+.dk-rec-add { flex: none; align-self: flex-start; }
+@media (max-width: 640px) { .dk-rec { flex-direction: column; align-items: stretch; } .dk-rec-add { align-self: stretch; justify-content: center; } }
+
+/* Import MCP servers: where each one comes from. */
+.dk-src { display: inline-block; font-size: 10.5px; font-weight: 700; padding: 0 6px; border-radius: 5px; line-height: 17px; color: #fff; vertical-align: 1px; }
+.dk-src.vs { background: #68217a; }
+.dk-src.code { background: #0065a9; }
+.dk-src.claude { background: #c15f3c; }
+.warn-text { color: var(--warn); }
+
+/* Claude Code chip and its options (Chat, when the model is Claude Code). */
+.dk-claude-wrap .chip-toggle .ic { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linejoin: round; }
+.dk-claude-wrap .chip-toggle b { font-weight: 600; opacity: .8; margin-left: 2px; }
+.dk-claude-menu { width: min(420px, calc(100vw - 24px)); max-height: min(70vh, 640px); overflow: auto; }
+.dk-cl-form { display: flex; flex-direction: column; gap: 9px; padding: 4px 6px 8px; }
+.dk-cl-form label { display: flex; flex-direction: column; gap: 4px; font-size: 12.5px; font-weight: 600; color: var(--text-2); }
+.dk-cl-form label .muted { font-weight: 400; }
+.dk-cl-form select, .dk-cl-form input, .dk-cl-form textarea { font-size: 13px; }
+.dk-cl-form textarea { resize: vertical; font-family: var(--mono); }
+.dk-cl-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.dk-cl-more summary { cursor: pointer; font-size: 12.5px; color: var(--accent); margin: 2px 0 6px; }
+.dk-cl-more[open] { display: flex; flex-direction: column; gap: 9px; }
+.dk-cl-session { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--muted); border-top: 1px solid var(--border); padding-top: 8px; }
+.dk-cl-session .btn { margin-left: auto; }

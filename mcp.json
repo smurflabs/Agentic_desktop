@@ -1,0 +1,21 @@
+{
+  "servers": [
+    {
+      "id": "filesystem",
+      "name": "Filesystem",
+      "transport": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "C:\\Users\\you\\Documents"],
+      "enabled": false,
+      "timeoutSeconds": 60
+    },
+    {
+      "id": "everything",
+      "name": "Everything (demo)",
+      "transport": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-everything"],
+      "enabled": false
+    }
+  ]
+}

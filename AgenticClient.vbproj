@@ -1,0 +1,85 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- One app, two builds. Windows (the default): a WinForms window with WebView2. Linux (dotnet publish -r linux-x64):
+       the same app without WinForms and WebView2, built for net10.0; its window is a browser app window (Linux\*). -->
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
+    <TargetFramework Condition="$(RuntimeIdentifier.StartsWith('linux')) Or $(RuntimeIdentifier.StartsWith('osx'))">net10.0</TargetFramework>
+    <RootNamespace>AgenticClient</RootNamespace>
+    <AssemblyName>AgenticClient</AssemblyName>
+    <OptionStrict>On</OptionStrict>
+    <OptionExplicit>On</OptionExplicit>
+    <OptionInfer>On</OptionInfer>
+    <OptionCompare>Binary</OptionCompare>
+    <!-- The one version number: the exe's file and product versions follow it, and the server compares updates with it. -->
+    <Version>0.4.19</Version>
+    <Product>Agentic Desktop</Product>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <NoWarn>$(NoWarn);MSB3277;CA1416</NoWarn>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <TieredPGO>true</TieredPGO>
+    <ServerGarbageCollection>false</ServerGarbageCollection>
+    <!-- Only the .pdb of references next to the exe (no WebView2 XML docs). -->
+    <AllowedReferenceRelatedFileExtensions>.pdb</AllowedReferenceRelatedFileExtensions>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' != 'net10.0'">
+    <OutputType>WinExe</OutputType>
+    <TargetFrameworkMinOSVersion>10.0.19041.0</TargetFrameworkMinOSVersion>
+    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationIcon>www\desktop\favicon.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <!-- dotnet publish makes one self-contained AgenticClient.exe (WebView2 and the runtime inside, no .dll or .pdb beside it)
+       plus www\desktop: the auto-updater replaces exactly those. With -r linux-x64: AgenticClient plus www/desktop. -->
+  <PropertyGroup Condition="'$(_IsPublishing)' == 'true'">
+    <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-x64</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+  <!-- Windows only: the WinForms window, its shortcuts, screenshots and title bar. -->
+  <ItemGroup Condition="'$(TargetFramework)' != 'net10.0'">
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2903.40" />
+    <Compile Remove="Linux\**" />
+  </ItemGroup>
+
+  <!-- Linux only: the browser app window and screenshots with the desktop's own tools. -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.1" />
+    <Compile Remove="Form1.vb;Program.vb;Desktop\**;Native\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- The desktop layer (desktop.js / desktop.css / connect page); the web app itself comes from the Agentic server. -->
+    <None Include="www\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </None>
+    <!-- Sample skills, copied into %APPDATA%\AgenticClient\skills on first run. -->
+    <None Include="SampleSkills\**\*" Link="skills\%(RecursiveDir)%(Filename)%(Extension)">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </None>
+    <None Include="mcp.json" Condition="Exists('mcp.json')">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </None>
+    <None Include="config.json" Condition="Exists('config.json')">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </None>
+  </ItemGroup>
+
+</Project>

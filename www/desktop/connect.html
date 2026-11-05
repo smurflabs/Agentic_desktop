@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="desktop-token" content="{{DESKTOP_TOKEN}}">
+  <title>Connect · Agentic</title>
+  <link rel="icon" href="/desktop/favicon.ico">
+  <link rel="stylesheet" href="/desktop/connect.css">
+  <script src="/desktop/connect.js" defer></script>
+</head>
+<body>
+  <main class="login">
+    <form id="connect" class="login-card" autocomplete="off">
+      <div class="brand"><img src="/desktop/logo.png" alt="Agentic" width="604" height="160"><div class="sub">Desktop</div></div>
+      <div id="reason" class="notice hidden" role="status"></div>
+      <label>API key<input name="apiKey" type="password" placeholder="agk_…"><span class="help" id="key-help">Create one in the web app: user menu → API key.</span></label>
+      <label class="switch-row"><input type="checkbox" id="custom"><span class="sw" aria-hidden="true"></span><span>Use a different server</span></label>
+      <label id="server-field" class="reveal hidden">Agentic server<input name="serverBaseUrl" placeholder="https://agentic.smurflabs.xyz"></label>
+      <div class="row">
+        <button type="button" class="btn hidden" id="test">Test</button>
+        <button type="submit" class="btn primary grow" id="save">Connect</button>
+      </div>
+      <p id="result" class="result" role="alert"></p>
+    </form>
+  </main>
+</body>
+</html>
