@@ -70,10 +70,11 @@ Download the build for your system from [Releases](https://github.com/smurflabs/
 
 | File | System |
 |---|---|
-| `agentic-desktop-<version>-win-x64.zip` | Windows 10 (2004) or later, x64. Needs the [WebView2 Runtime](https://developer.microsoft.com/microsoft-edge/webview2/), which Windows 11 already has. |
-| `agentic-desktop-<version>-linux-x64.tar.gz` | Linux x64. The window opens in Chrome, Chromium, Edge, Brave or Vivaldi. |
+| `AgenticDesktop-<version>-x64.msi` | **Windows installer.** Installs for your account only, with no administrator rights, and adds Start menu and desktop shortcuts. |
+| `AgenticClient.exe` | Windows, portable: one self-contained file. Run it from any folder you can write to. |
+| `agentic-desktop-<version>-linux-x64.tar.gz` | Linux x64. The window opens in Chrome, Chromium, Edge, Brave or Vivaldi. Extract it and run `./Agentic-Desktop/AgenticClient`. |
 
-Extract the folder anywhere you like and run `AgenticClient.exe` (Windows) or `./AgenticClient` (Linux).
+On Windows you need Windows 10 (version 2004) or later, x64, with the [WebView2 Runtime](https://developer.microsoft.com/microsoft-edge/webview2/), which Windows 11 already has.
 
 ### From your Agentic server
 

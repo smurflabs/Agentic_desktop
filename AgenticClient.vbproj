@@ -64,6 +64,11 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </None>
+    <!-- tools\MsiBuilder is a project of its own (the Windows installer). -->
+    <Compile Remove="tools\**" />
+    <None Remove="tools\**" />
+    <!-- The same files inside the exe, so a lone exe writes them out on its first start (Infrastructure\DesktopFiles.vb). -->
+    <EmbeddedResource Include="www\**\*" LogicalName="www/%(RecursiveDir)%(Filename)%(Extension)" />
     <!-- Sample skills, copied into %APPDATA%\AgenticClient\skills on first run. -->
     <None Include="SampleSkills\**\*" Link="skills\%(RecursiveDir)%(Filename)%(Extension)">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

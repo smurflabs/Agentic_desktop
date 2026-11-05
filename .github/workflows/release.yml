@@ -1,6 +1,9 @@
-# Publishes a GitHub release when a version tag (v0.4.19, ...) is pushed: the app for Windows (WinForms + WebView2, built
-# on Windows) and for Linux, each as an Agentic-Desktop folder with the program and its www files, plus SHA-256 sums.
-# The notes are the annotated tag's message.
+# Publishes a GitHub release when a version tag (v0.4.19, ...) is pushed:
+#   AgenticClient.exe                 Windows, one self-contained file (it writes its www files out on the first start)
+#   AgenticDesktop-<version>-x64.msi  Windows installer (per user, Start menu and desktop shortcuts; tools\MsiBuilder)
+#   agentic-desktop-<version>-linux-x64.tar.gz   Linux (the Agentic-Desktop folder)
+#   SHA256SUMS.txt
+# Windows builds run on Windows, so the exe keeps its icon and version resource. The notes are the annotated tag's message.
 name: Release
 
 on:
@@ -9,6 +12,10 @@ on:
 
 permissions:
   contents: write
+
+env:
+  # The MSI's upgrade code: never change it, or new MSIs stop replacing installed ones (same as tools\publish-clients.ps1).
+  UPGRADE_CODE: '{5B0E4C1A-6D2F-4E8B-9A71-3C4D2E1F0A93}'
 
 jobs:
   build:
@@ -46,18 +53,32 @@ jobs:
       - name: Package (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
-        run: Compress-Archive -Path Agentic-Desktop -DestinationPath "agentic-desktop-${{ steps.version.outputs.version }}-win-x64.zip"
+        run: |
+          $v = '${{ steps.version.outputs.version }}'
+          New-Item -ItemType Directory -Force dist, msi-source | Out-Null
+          Copy-Item Agentic-Desktop/AgenticClient.exe dist/AgenticClient.exe
+          (Get-Item dist/AgenticClient.exe).VersionInfo | Format-List ProductName, ProductVersion, FileVersion
+          # The installer holds the exe and its www folder.
+          Copy-Item Agentic-Desktop/AgenticClient.exe msi-source/
+          Copy-Item Agentic-Desktop/www msi-source/ -Recurse
+          dotnet build tools/MsiBuilder/MsiBuilder.vbproj -c Release -nologo -o msibuilder
+          if ($LASTEXITCODE -ne 0) { throw 'MsiBuilder did not build.' }
+          ./msibuilder/MsiBuilder.exe --source msi-source --exe AgenticClient.exe --name 'Agentic Desktop' --manufacturer Agentic `
+            --version $v --upgrade-code $env:UPGRADE_CODE --arch x64 --out "dist/AgenticDesktop-$v-x64.msi"
+          if ($LASTEXITCODE -ne 0) { throw 'The MSI was not built.' }
+          Get-ChildItem dist
 
       - name: Package (Linux)
         if: runner.os == 'Linux'
         run: |
           chmod +x Agentic-Desktop/AgenticClient
-          tar -czf "agentic-desktop-${{ steps.version.outputs.version }}-linux-x64.tar.gz" Agentic-Desktop
+          mkdir -p dist
+          tar -czf "dist/agentic-desktop-${{ steps.version.outputs.version }}-linux-x64.tar.gz" Agentic-Desktop
 
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.rid }}
-          path: agentic-desktop-*
+          path: dist/*
 
   release:
     needs: build

@@ -81,7 +81,7 @@ Namespace Http
             _local = local
             _settings = settings
             _token = token
-            _wwwRoot = Path.Combine(AppContext.BaseDirectory, "www")
+            _wwwRoot = DesktopFiles.WwwRoot()
             _proxy.DesktopToken = token
         End Sub
 
