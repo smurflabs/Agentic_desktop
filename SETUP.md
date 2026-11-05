@@ -5,7 +5,7 @@ Agentic Desktop shows your Agentic server's web app in a window of its own, open
 - local MCP servers
 - tools that work on this computer's files and commands, with your approval
 
-[README.md](README.md) covers the features in depth.
+The [reference manual](docs/REFERENCE.md) covers the features in depth.
 
 ## 1. What you need
 
