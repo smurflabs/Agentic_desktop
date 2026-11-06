@@ -9,7 +9,7 @@
 ![.NET 10](https://img.shields.io/badge/.NET-10-512BD4)
 ![Runs on Windows, Linux and macOS](https://img.shields.io/badge/runs%20on-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey)
 
-[Install](#install) · [Screenshots](#screenshots) · [Features](#features) · [Setup guide](SETUP.md) · [Reference manual](docs/REFERENCE.md) · [Agentic server](https://github.com/smurflabs/Agentic)
+[Install](#install) · [Screenshots](#screenshots) · [Features](#features) · [MCP servers](#mcp-servers) · [Setup guide](SETUP.md) · [Reference manual](docs/REFERENCE.md) · [Agentic server](https://github.com/smurflabs/Agentic)
 
 </div>
 
@@ -82,6 +82,68 @@ WebView2 window ──► local server on 127.0.0.1
 - **Every tab of the web app,** including Audio, Images and Music.
 - **Self-updating:** the app and its desktop layer update themselves from your Agentic server.
 - **Look:** the title bar follows the web app's light or dark theme.
+
+## MCP servers
+
+Chat in the desktop app gets [MCP](https://modelcontextprotocol.io) tools from two sides: the Agentic server, and this computer.
+
+### Ready without any setup
+
+- **Your Agentic server's MCP servers.** These are the server's [16 built-in tool servers](https://github.com/smurflabs/Agentic#built-in-tool-servers) (storage, git, documents, database, data, files, code review, network checks, utilities and more), plus the servers you or your administrator added under **My MCP servers**. Turn them on in Chat's **Tools** menu. They run on the server, and you can use only the ones your account may use.
+- **Tools on this computer.** These are built into the app (not MCP): read, search, write and edit files in your workspace folders, run commands, and call the Agentic API as you. Turn them on with the **This PC** chip.
+- **REA (reverse engineering)** is added to your list switched off, ready to turn on once Node.js is installed.
+
+### The catalog: well-known servers in one click
+
+Open **This computer → Local MCP** and choose a server from the catalog. Servers that need nothing else are added in one click; for the others, a filled-in form asks for the folder or API key. The same list is in the web app, VS Code and the CLI.
+
+| Server | What it does | Needs |
+|---|---|---|
+| Filesystem | Read, search and edit files in the folders you allow | Node.js |
+| Git | Read a Git repository: status, diffs, log, branches and commits | uv (Python) |
+| GitHub | GitHub's official server: repositories, issues, pull requests, code search and Actions (hosted) | A GitHub token |
+| Desktop Commander | Terminal commands, processes and file editing on the computer it runs on | Node.js |
+| Playwright browser | Microsoft's browser automation: open pages, click, type, fill forms and read pages | Node.js 20+ |
+| Chrome DevTools | Google's server for Chrome: drive the browser, read the console and network, record performance traces | Node.js 20.19+ and Chrome |
+| Fetch | Download a web page and turn it into Markdown | uv (Python) |
+| Firecrawl | Scrape, crawl and extract structured data from websites, including JavaScript-heavy ones | Node.js 22+ and a Firecrawl API key |
+| Brave Search | Web, news, image and local search through Brave's own index | Node.js and a Brave Search API key |
+| Tavily | Search built for AI agents, with page extraction and site crawling | Node.js and a Tavily API key |
+| Exa | Neural web search: pages by meaning, research papers, companies and code | Node.js 20+ and an Exa API key |
+| Context7 | Current documentation and code examples for thousands of libraries | Node.js 20+ |
+| Microsoft Learn | Search and read Microsoft's documentation: .NET, Azure, Windows, Microsoft 365 (hosted) | Nothing |
+| DeepWiki | Ask questions about any public GitHub repository and read its generated wiki (hosted) | Nothing |
+| AWS Documentation | Search and read AWS documentation | uv (Python) |
+| Notion | Search, read and update pages and databases in your Notion workspace | Node.js and a Notion integration token |
+| Supabase | Query and manage Supabase projects: tables, SQL, migrations and logs (read-only by default) | Node.js and a Supabase access token |
+| Memory | A knowledge graph the model stores facts in and recalls across sessions | Node.js |
+| Sequential Thinking | Structured step-by-step reasoning that the model can revise and branch | Node.js |
+| Time | The current time in any time zone, and conversions | uv (Python) |
+| REA | Reverse engineering of native binaries, .NET assemblies, JS/Electron apps, Android APKs and websites | Node.js 22+; optionally Ghidra, Hopper or IDA |
+
+### Add your own
+
+Open **This computer → Local MCP** and choose **Add server**:
+
+- **Transports:**
+  - **stdio:** a program on this computer. `npx`, `uvx` and other `.cmd` launchers work.
+  - **HTTP:** Streamable HTTP.
+  - **SSE:** the older HTTP + SSE transport.
+- **Options:** environment variables, headers, a timeout, and **Ask first**, which asks you before each of the server's tools is used, in every permission mode.
+- **Import** copies servers you set up in Claude Code, Claude Desktop, Visual Studio or VS Code. It searches your workspace folders too.
+- **Install on my computer:** on the web app's **My MCP servers** page, this sends a server to this app, and its form opens filled in.
+- **Sign in:** hosted servers that use OAuth sign in through the browser.
+- **The server page:** switch servers on and off, reconnect them, browse their tools, run a tool with test arguments, and read a server's recent output.
+
+The servers are kept in `%APPDATA%\AgenticClient\mcp.json` (`~/.config/AgenticClient/mcp.json` on Linux and macOS). The file can also be edited by hand, in this app's layout or Claude Code's:
+
+```json
+{ "mcpServers": {
+    "files":  { "command": "npx", "args": ["-y", "@modelcontextprotocol/server-filesystem", "C:\\Projects"] },
+    "remote": { "type": "http", "url": "https://example.com/mcp", "headers": { "Authorization": "Bearer …" } } } }
+```
+
+While the app is open, chats in the web app can use these servers too: turn on this computer in **Tools → Tools on your computers**. Every setting is in the [reference manual](docs/REFERENCE.md#local-mcp-servers-this-computer--local-mcp).
 
 ## Install
 
