@@ -9,7 +9,7 @@
 ![.NET 10](https://img.shields.io/badge/.NET-10-512BD4)
 ![Runs on Windows, Linux and macOS](https://img.shields.io/badge/runs%20on-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey)
 
-[Install](#install) · [Features](#features) · [Setup guide](SETUP.md) · [Reference manual](docs/REFERENCE.md) · [Agentic server](https://github.com/smurflabs/Agentic)
+[Install](#install) · [Screenshots](#screenshots) · [Features](#features) · [Setup guide](SETUP.md) · [Reference manual](docs/REFERENCE.md) · [Agentic server](https://github.com/smurflabs/Agentic)
 
 </div>
 
@@ -26,6 +26,27 @@ WebView2 window ──► local server on 127.0.0.1
                       ├─ desktop layer and local tools (files, commands, skills, MCP)
                       └─ everything else ──► your Agentic server (your API key is added here, never in the page)
 ```
+
+## Screenshots
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <img src="docs/screenshots/desktop-home.png" alt="Agentic Desktop on Windows: the web app with This computer: Skills, Local MCP and Desktop settings"><br>
+      <sub><b>The whole web app</b> in its own window, plus <b>This computer</b>: Skills, local MCP servers and Desktop settings.</sub>
+    </td>
+    <td width="50%" valign="top">
+      <img src="docs/screenshots/desktop-chat.png" alt="Agentic Desktop chat with the Skills and This PC chips and the tokens-per-second gauge"><br>
+      <sub><b>Chat</b>: skills and this computer's tools are chips in the message box, and the model bar shows live speed.</sub>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" valign="top">
+      <img src="docs/screenshots/desktop-multitask.png" alt="Agentic Desktop Multitask: two chats side by side"><br>
+      <sub><b>Multitask</b>: up to four chats side by side, each answering live.</sub>
+    </td>
+  </tr>
+</table>
 
 ## Features
 
